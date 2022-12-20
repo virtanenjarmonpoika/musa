@@ -53,40 +53,40 @@
   const topArtistsElement = document.querySelector('#container');
   const albumImageElement = document.querySelector('#album-image');
 
-  // Add a click event listener to the button
+  // Adding eventlistener to the button
   button.addEventListener('click', () => {
-    // Call the getTopArtists function and display the result in the top-artists element
+    // Calling for the function
     getTopArtists().then(artistNames => {
-      // Create an empty string to store the HTML code for the list of top artists
+      // Creating empty string to store HTML code
       let artistLinks = '';
 
-      // Iterate over the array of artist names
+      // Going over the artistnames
       for (const artistName of artistNames) {
-        // Create an HTML link for each artist
+        // Creating a link for the artistnames
         artistLinks += `<a href="#" class="artist-link">${artistName}</a>`;
       }
 
-      // Set the inner HTML of the top-artists element to the list of artist links
+      // displaying the names
       topArtistsElement.innerHTML = artistLinks;
 
-      // Add a click event listener to each artist link
+      // adding eventlistener for clicking the artistnames
       const artistLinksElements = document.querySelectorAll('.artist-link');
       for (const artistLink of artistLinksElements) {
         artistLink.addEventListener('click', event => {
-          // Prevent the default link behavior
+          
           event.preventDefault();
 
-          // Get the name of the clicked artist
+          // getting the name of clicked artist
           const artistName = event.target.textContent;
 
-          // Make a request to the Last.fm API to get the artist's top album
+          // making request to the API to get the album
           fetch(`https://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&artist=${encodeURIComponent(artistName)}&api_key=${API_KEY}&format=json`)
             .then(response => response.json())
             .then(data => {
-              // Extract the URL of the album image from the response
+              // getting the album image
               const albumImageUrl = data.topalbums.album[0].image[3]['#text'];
 
-              // Set the src attribute of the album-image element to the URL of the album image
+              // displaying the image
               albumImageElement.innerHTML = `<img src="${albumImageUrl}" alt="Album image for ${artistName}">`;
             });
         });
