@@ -1,1 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+    <title>MUSIC</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <button id="get-artists"type="submit">Show artists</button>
+                <div id="searchbar">
+                    <input type="search">
+                </div>
+            </ul>
+        </nav>
+    </header>
+    <div id="container">
+        
+    </div>
+    <div id="album-image"></div>
+    <script>
+        // saving my API KEY for later use
+        const API_KEY = '8834f74ade62d3b291172098b4baa37e';
 
+        //Making a request to last.fm API
+        async function getTopArtists() {
+            const response = await fetch('http://ws.audioscrobbler.com/2.0/?method=chart.gettopartists&api_key=8834f74ade62d3b291172098b4baa37e&format=json');
+
+            //parsing the response
+
+            const data = await response.json();
+
+            //getting the array of topartists
+            const topArtists = data.artists.artist;
+
+            //generating empty array for artist names
+            const artistNames = [];
+
+            //iterating over the array
+            for(const artist of topArtists) {
+                //pushing the name to the array
+                artistNames.push(artist.name);
+
+            }
+            //returning the names
+            return artistNames;
+        }
+        const button = document.querySelector('#get-artists');
+  const topArtistsElement = document.querySelector('#container');
+  const albumImageElement = document.querySelector('#album-image');
+
+  // Add a click event listener to the button
+  button.addEventListener('click', () => {
+    // Call the getTopArtists function and display the result in the top-artists element
+    getTopArtists().then(artistNames => {
+      // Create an empty string to store the HTML code for the list of top artists
+      let artistLinks = '';
+
+      // Iterate over the array of artist names
+      for (const artistName of artistNames) {
+        // Create an HTML link for each artist
+        artistLinks += `<a href="#" class="artist-link">${artistName}</a>`;
+      }
+
+      // Set the inner HTML of the top-artists element to the list of artist links
+      topArtistsElement.innerHTML = artistLinks;
+
+      // Add a click event listener to each artist link
+      const artistLinksElements = document.querySelectorAll('.artist-link');
+      for (const artistLink of artistLinksElements) {
+        artistLink.addEventListener('click', event => {
+          // Prevent the default link behavior
+          event.preventDefault();
+
+          // Get the name of the clicked artist
+          const artistName = event.target.textContent;
+
+          // Make a request to the Last.fm API to get the artist's top album
+          fetch(`https://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&artist=${encodeURIComponent(artistName)}&api_key=${API_KEY}&format=json`)
+            .then(response => response.json())
+            .then(data => {
+              // Extract the URL of the album image from the response
+              const albumImageUrl = data.topalbums.album[0].image[3]['#text'];
+
+              // Set the src attribute of the album-image element to the URL of the album image
+              albumImageElement.innerHTML = `<img src="${albumImageUrl}" alt="Album image for ${artistName}">`;
+            });
+        });
+      }
+    });
+  });
+           
+        
+    </script>
+</body>
+</html>

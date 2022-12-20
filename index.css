@@ -1,0 +1,47 @@
+
+
+/* Style the body element as a flex container */
+body {
+    display: flex;
+  }
+  
+  /* Style the button as a block element */
+  button {
+    display: block;
+    margin: 20px 0;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #00b8d4;
+    color: white;
+    font-size: 16px;
+  }
+  
+  /* Style the top-artists and album-image elements as flex containers */
+  #top-artists, #album-image {
+    display: flex;
+    flex-direction: column;
+    margin: 20px 0;
+  }
+  
+  /* Style the artist links as block elements */
+  .artist-link {
+    display: block;
+    font-size: 16px;
+  }
+  
+  /* Style the album-image element as a fixed width element */
+  #album-image {
+    width: 500px;
+    height: 500px;
+    overflow: hidden;
+    border-radius: 5px;
+  }
+  
+  /* Style the album image as a responsive element */
+  #album-image img {
+    width: 100%;
+    height: auto;
+  }
+  
+  
